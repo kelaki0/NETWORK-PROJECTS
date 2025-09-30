@@ -1,17 +1,18 @@
-network project simulations in packet tracer.
-Primary Goals.
+This repository contains network project simulations in packet tracer.
+
+1. Primary Goals.
     1. Security.
     2. Scalability.
     3. Stability/Reliability/Availability
     4. Speed/Performance.
 
-Secondary Goals.
+2. Secondary Goals.
     1. Manageability/Administrability
     2. Flexibility/Adaptability
     3. Cost-Effectiveness/Resource Sharing
     4. Usability
 
-PROCESS.
+3. PROCESS.
     1. Racking.
        - Drag and drop devices from the panel.
        - Group devices and/or VLANs.
@@ -20,8 +21,7 @@ PROCESS.
        - Pick the right cables from the panel and connect the devices accordingly (e.g. copper-straight-through, copper-cross-over).
        
     3. Configurations.
-       
-       Network devices basic configurations;
+    * Network devices basic configurations;
     • Hostname
     • Banner messages.
     • Secure access.
@@ -33,7 +33,7 @@ PROCESS.
     • DHCP pools and DNS configurations.
     • Save configurations.
       
-      End-user devices
+   * End-user devices
     • IP address configuration.
       - DHCP – static or dynamic.
       - DNS configuration.
