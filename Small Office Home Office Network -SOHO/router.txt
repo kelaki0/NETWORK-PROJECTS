@@ -1,0 +1,73 @@
+en
+conf t
+
+hostname CAFE-ROUTER
+
+banner motd # Authorized Access ONLY! Unauthorized Access is Prohibited!! #
+
+username mzee privilege 15 secret mzee@2025
+username jomba privilege 15 secret jomba@2025
+
+line vty 0 4
+login local
+transport input ssh
+exit
+ip domain-name cafe.local
+crypto key generate rsa 1024
+exit
+
+line console 0
+login local
+exit
+
+service password encryption
+
+int g0/0
+no ip add
+no shut
+
+int g0/0.20
+encapsulation dot1q 20
+ip add 192.168.1.1 255.255.255.224
+no shut
+
+int g0/0.40
+encapsulation dot1q 40
+ip add 192.168.1.33 255.255.255.240
+no shut
+
+int g0/0.60
+encapsulation dot1q 60
+ip add 192.168.1.49 255.255.255.248
+no shut
+
+interface g0/0.99
+encapsulation dot1Q 99
+ip address 192.168.1.58 255.255.255.248
+
+ip dhcp excluded-add 192.168.1.1
+ip dhcp excluded-add 192.168.1.33
+ip dhcp excluded-add 192.168.1.49
+
+ip dhcp pool ADMIN-IT
+network 192.168.1.0 255.255.255.224
+default-router 192.168.1.1
+dns-server 8.8.8.8
+exit
+
+ip dhcp pool FINANCE-HR
+network 192.168.1.32 255.255.255.240
+default-router 192.168.1.33
+dns-server 8.8.8.8
+exit
+
+ip dhcp pool CS-RECEPTION
+network 192.168.1.48 255.255.255.248
+default-router 192.168.1.49
+dns-server 8.8.8.8
+exit
+
+end
+write
+
+

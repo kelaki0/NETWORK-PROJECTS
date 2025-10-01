@@ -1,0 +1,96 @@
+en
+conf t
+
+hostname ADMIN_IT
+
+banner motd # Authorized Access ONLY! Unauthorized access is PROHIBITED!! #
+
+username jomba privilege 15 secret jomba@2025
+username mzee privilege 15 secret mzee@jomba
+
+line vty 0 15
+login local
+transport input ssh
+crypto key generate rsa 1024
+exit
+
+line console 0
+login local
+exit
+service password encryption
+
+vlan 20
+name ADMIN-IT
+vlan 99
+name
+MANAGEMENT
+
+int vlan 99
+ip add 192.168.1.59 255.255.255.248
+no shut
+exit
+
+ip default-gateway 192.168.1.58
+
+int range fa0/1-8
+switchport mode access
+switchport access vlan 20
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+spanning-tree portfast
+description ## ADMIN_IT_DATA ##
+no shut
+
+int range fa0/9-16
+switchport mode access
+switchport access vlan 40
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+spanning-tree portfast
+description ## FINANCE_HR_DATA ##
+no shut
+
+int range fa0/17-24
+switchport mode access
+switchport access vlan 60
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+spanning-tree portfast
+description ## CUSTOMER_SUPPORT_IT_RECEPTION ##
+no shut
+
+int g0/1
+switchport mode trunk
+switchport trunk allowed vlan 20,40,60,99
+description ## UPLINK_TO_ROUTER ##
+exit
+
+end
+write
+
+
+interface fastEthernet 0/3
+switchport mode access
+switchport access vlan 20
+description ## AP_ADMIN_IT ##
+exit
+
+interface fastEthernet 0/10
+switchport mode access
+switchport access vlan 40
+description ## AP_FINANCE_HR ##
+exit
+
+interface fastEthernet 0/19
+switchport mode access
+switchport access vlan 60
+description ## AP_CUSTOMER_SERVICE ##
+exit
+exit
+write memory
