@@ -29,7 +29,7 @@ This repository contains network project simulations in packet tracer.
     • Management IP address.
     • Default gateway.
     • VLAN id and name assignment.
-    • Interface configurations – VLAN and VOICE.
+    • Interface configurations – VLAN and VOICE and Port security.
     • DHCP pools and DNS configurations.
     • Save configurations.
       

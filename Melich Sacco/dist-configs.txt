@@ -1,0 +1,333 @@
+enable
+configure terminal
+hostname DIST-SW1
+
+banner motd #Authorized Access Only: SACCO Primary Distribution Switch. Unauthorized access is prohibited.#
+
+username mzee privilege 15 secret mzee@2025
+username jomba privilege 15 secret jomba@2025
+enable secret sacco@enable
+
+line vty 0 4
+login local
+transport input ssh
+exit
+ip domain-name sacco.local
+crypto key generate rsa 1024
+
+line console 0
+login local
+exit
+service password-encryption
+
+ip routing
+
+vlan 10
+name ADMINISTRATION
+vlan 20
+name FINANCE
+vlan 30
+name CREDIT_LOANS
+vlan 40
+name RECEPTION
+vlan 50
+name CUSTOMER_SERVICE
+vlan 60
+name MARKETING
+vlan 70
+name HR
+vlan 80
+name IT
+vlan 90
+name SERVER_ROOM
+vlan 99
+name MANAGEMENT_VLAN
+
+interface vlan10
+ip address 172.16.4.1 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan20
+ip address 172.16.4.17 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+ 
+interface vlan30
+ip address 172.16.4.33 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan40
+ip address 172.16.4.97 255.255.255.248
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan50
+ip address 172.16.4.49 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan60
+ip address 172.16.4.105 255.255.255.248
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan70
+ip address 172.16.4.113 255.255.255.248
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+ 
+interface vlan80
+ip address 172.16.4.65 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+ 
+interface vlan90
+ip address 172.16.4.121 255.255.255.248
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+ 
+interface vlan99
+ip address 172.16.4.86 255.255.255.240
+no shutdown
+ 
+ip dhcp excluded-address 172.16.4.1
+ip dhcp excluded-address 172.16.4.17
+ip dhcp excluded-address 172.16.4.33
+ip dhcp excluded-address 172.16.4.49
+ip dhcp excluded-address 172.16.4.65
+ip dhcp excluded-address 172.16.4.86 172.16.4.87
+ip dhcp excluded-address 172.16.4.97
+ip dhcp excluded-address 172.16.4.105
+ip dhcp excluded-address 172.16.4.113
+
+ip dhcp pool ADMIN_VLAN10
+network 172.16.4.0 255.255.255.240
+default-router 172.16.4.1
+
+ip dhcp pool FINANCE_VLAN20
+network 172.16.4.16 255.255.255.240
+default-router 172.16.4.17
+ 
+ip dhcp pool CREDIT_VLAN30
+network 172.16.4.32 255.255.255.240
+default-router 172.16.4.33
+ 
+ip dhcp pool RECEPTION_VLAN40
+network 172.16.4.96 255.255.255.248
+default-router 172.16.4.97
+ 
+ip dhcp pool CUSTOMER_VLAN50
+network 172.16.4.48 255.255.255.240
+default-router 172.16.4.49
+ 
+ip dhcp pool MARKETING_VLAN60
+network 172.16.4.104 255.255.255.248
+default-router 172.16.4.105
+ 
+ip dhcp pool HR_VLAN70
+network 172.16.4.112 255.255.255.248
+default-router 172.16.4.113
+
+ip dhcp pool IT_VLAN80
+network 172.16.4.64 255.255.255.240
+default-router 172.16.4.65
+
+interface range gigabitEthernet1/0/1 - 4
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,99
+description ## UPLINK_TO_ACCESS_SW ##
+no shutdown
+
+interface gigabitEthernet1/0/24
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,99
+description ## UPLINK_TO_DIST_SW2 ##
+no shutdown
+
+int range gig1/0/5 - 22
+description ## not in use ##
+shut
+
+int range gig1/1/1 - 4
+description ## not in use ##
+shut
+
+end
+write memory
+
+
+
+
+enable
+configure terminal
+
+hostname DIST-SW2
+
+banner motd #Authorized Access Only: SACCO Backup Distribution Switch. Unauthorized access is prohibited.#
+
+username mzee privilege 15 secret mzee@2025
+username jomba privilege 15 secret jomba@2025
+enable secret sacco@enable
+
+line vty 0 4
+login local
+transport input ssh
+exit
+ip domain-name sacco.local
+crypto key generate rsa 1024
+
+line console 0
+login local
+exit
+service password-encryption
+
+ip routing
+
+vlan 10
+name ADMINISTRATION
+vlan 20
+name FINANCE
+vlan 30
+name CREDIT_LOANS
+vlan 40
+name RECEPTION
+vlan 50
+name CUSTOMER_SERVICE
+vlan 60
+name MARKETING
+vlan 70
+name HR
+vlan 80
+name IT
+vlan 90
+name SERVER_ROOM
+vlan 99
+name MANAGEMENT_VLAN
+
+interface vlan10
+ip address 172.16.4.2 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan20
+ip address 172.16.4.18 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+ 
+interface vlan30
+ip address 172.16.4.34 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+ 
+interface vlan40
+ip address 172.16.4.98 255.255.255.248
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan50
+ip address 172.16.4.50 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan60
+ip address 172.16.4.106 255.255.255.248
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan70
+ip address 172.16.4.114 255.255.255.248
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+ 
+interface vlan80
+ip address 172.16.4.66 255.255.255.240
+ip helper-address 172.16.4.86
+ip helper-address 172.16.4.87
+no shutdown
+
+interface vlan99
+ip address 172.16.4.87 255.255.255.240
+no shutdown
+ 
+ip dhcp excluded-address 172.16.4.1 172.16.4.2
+ip dhcp excluded-address 172.16.4.17 172.16.4.18
+ip dhcp excluded-address 172.16.4.33 172.16.4.34
+ip dhcp excluded-address 172.16.4.49 172.16.4.50
+ip dhcp excluded-address 172.16.4.65 172.16.4.66
+ip dhcp excluded-address 172.16.4.97 172.16.4.98
+ip dhcp excluded-address 172.16.4.105 172.16.4.106
+ip dhcp excluded-address 172.16.4.113 172.16.4.114
+ip dhcp excluded-address 172.16.4.121 172.16.4.122
+
+ip dhcp pool ADMIN_VLAN10
+network 172.16.4.0 255.255.255.240
+default-router 172.16.4.1
+
+ip dhcp pool FINANCE_VLAN20
+network 172.16.4.16 255.255.255.240
+default-router 172.16.4.17
+
+ip dhcp pool CREDIT_VLAN30
+network 172.16.4.32 255.255.255.240
+default-router 172.16.4.33
+
+ip dhcp pool RECEPTION_VLAN40
+network 172.16.4.96 255.255.255.248
+default-router 172.16.4.97
+
+ip dhcp pool CUSTOMER_VLAN50
+network 172.16.4.48 255.255.255.240
+default-router 172.16.4.49
+
+ip dhcp pool MARKETING_VLAN60
+network 172.16.4.104 255.255.255.248
+default-router 172.16.4.105
+
+ip dhcp pool HR_VLAN70
+network 172.16.4.112 255.255.255.248
+default-router 172.16.4.113
+
+ip dhcp pool IT_VLAN80
+network 172.16.4.64 255.255.255.240
+default-router 172.16.4.65
+
+interface range gigabitEthernet1/0/1 - 4
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,99
+description ## UPLINK_TO_ACCESS_SW ##
+no shutdown
+
+interface gigabitEthernet1/0/24
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,99
+description ## UPLINK_TO_DIST_SW1 ##
+no shutdown
+
+int range gig1/0/5 - 22
+description ## not in use ##
+shut
+
+int range gig1/1/1 - 4
+description ## not in use ##
+shut
+
+end
+write memory

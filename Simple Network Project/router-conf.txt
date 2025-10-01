@@ -1,0 +1,61 @@
+en
+conf t
+
+hostname MAIN-ROUTER
+
+banner motd #Authorized Access Only. Unauthorized Access Prohibited!#
+
+username mzee privilege 15 secret mzee@2025
+username jomba privilege 15 secret jomba@2025
+
+line vty 0 4
+login local
+transport input ssh
+exit
+ip domain-name org.local
+crypto key generate rsa 1024
+
+line console 0
+login local
+exit
+service password-encryption
+
+vlan 10
+name DELIVERY
+vlan 20
+name ACCOUNTS
+vlan 99
+name MANAGEMENT
+
+int vlan99
+ip add 192.168.40.17 255.255.255.248
+no shut
+
+int g0/1.10
+encapsulation dot1q 10
+ip add 192.168.40.1 255.255.255.248
+description ## DELIVERY_VLAN_10 ##
+no shut
+exit
+
+int g0/0.20
+encapsulation dot1q 20
+ip add 192.168.40.9 255.255.255.248
+description ## ACCOUNTS_VLAN_20 ##
+no shut
+exit
+
+int g0/2
+description ## not in use ##
+shut
+
+int g0/0
+ip add 192.168.40.9 255.255.255.248
+no shut
+
+int g0/1
+ip add 192.168.40.1 255.255.255.248
+no shut
+
+end
+write
