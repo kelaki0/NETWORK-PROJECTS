@@ -1,36 +1,45 @@
 en
 conf t
 
-hostname ADMIN_IT
+hostname CAFE_IT
 
 banner motd # Authorized Access ONLY! Unauthorized access is PROHIBITED!! #
 
+vlan 20
+name ADMIN-IT
+exit
+vlan 40
+name FINANCE-HR
+exit
+vlan 60
+name CUSTOMER-RECEPTION
+exit
+vlan 99
+name MANAGEMENT
+exit
+
 username jomba privilege 15 secret jomba@2025
-username mzee privilege 15 secret mzee@jomba
+username mzee privilege 15 secret mzee@2025
 
 line vty 0 15
 login local
 transport input ssh
-crypto key generate rsa 1024
 exit
+ip domain-name cafe.local
+crypto key generate rsa general-keys modulus 1024
 
 line console 0
 login local
 exit
-service password encryption
 
-vlan 20
-name ADMIN-IT
-vlan 99
-name
-MANAGEMENT
+service password-encryption
 
-int vlan 99
-ip add 192.168.1.59 255.255.255.248
+int vlan99
+ip add 192.168.1.66 255.255.255.248
 no shut
 exit
 
-ip default-gateway 192.168.1.58
+ip default-gateway 192.168.1.65
 
 int range fa0/1-8
 switchport mode access
@@ -42,6 +51,7 @@ switchport port-security mac-address sticky
 spanning-tree portfast
 description ## ADMIN_IT_DATA ##
 no shut
+exit
 
 int range fa0/9-16
 switchport mode access
@@ -53,6 +63,7 @@ switchport port-security mac-address sticky
 spanning-tree portfast
 description ## FINANCE_HR_DATA ##
 no shut
+exit
 
 int range fa0/17-24
 switchport mode access
@@ -64,33 +75,34 @@ switchport port-security mac-address sticky
 spanning-tree portfast
 description ## CUSTOMER_SUPPORT_IT_RECEPTION ##
 no shut
+exit
 
 int g0/1
 switchport mode trunk
 switchport trunk allowed vlan 20,40,60,99
 description ## UPLINK_TO_ROUTER ##
+no shut
 exit
-
-end
-write
-
 
 interface fastEthernet 0/3
 switchport mode access
 switchport access vlan 20
 description ## AP_ADMIN_IT ##
+no shut
 exit
 
 interface fastEthernet 0/10
 switchport mode access
 switchport access vlan 40
 description ## AP_FINANCE_HR ##
+no shut
 exit
 
 interface fastEthernet 0/19
 switchport mode access
 switchport access vlan 60
 description ## AP_CUSTOMER_SERVICE ##
-exit
-exit
-write memory
+no shut
+
+end
+write

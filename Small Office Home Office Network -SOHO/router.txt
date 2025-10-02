@@ -13,14 +13,13 @@ login local
 transport input ssh
 exit
 ip domain-name cafe.local
-crypto key generate rsa 1024
-exit
+crypto key generate rsa general-keys modulus 1024
 
 line console 0
 login local
 exit
 
-service password encryption
+service password-encryption
 
 int g0/0
 no ip add
@@ -43,11 +42,12 @@ no shut
 
 interface g0/0.99
 encapsulation dot1Q 99
-ip address 192.168.1.58 255.255.255.248
+ip address 192.168.1.65 255.255.255.252
 
 ip dhcp excluded-add 192.168.1.1
 ip dhcp excluded-add 192.168.1.33
 ip dhcp excluded-add 192.168.1.49
+ip dhcp excluded-add 192.168.1.65
 
 ip dhcp pool ADMIN-IT
 network 192.168.1.0 255.255.255.224
